@@ -9,7 +9,7 @@ class AutosApiController {
     private $data;
 
     function __construct(){
-        $this->model = new AutosModel();
+        $this->model = new AutoModel();
         $this->view = new MotorApiView();
 
         $this->data = file_get_contents("php://input");
@@ -31,7 +31,7 @@ class AutosApiController {
         if($autos){
             $this->view->response($autos, 200);
         } else {
-            $this->view->response("El Auto con el id=$id no existe", 404);
+            $this->view->response("El Auto con el id $id no existe", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class AutosApiController {
             $this->model->delete($id);
             $this->view->response($autos, 200);
         } else {
-            $this->view->response("El Auto con el id=$id no se existe", 404);
+            $this->view->response("El Auto con el id $id no existe", 404);
         }
     }
 
@@ -61,11 +61,11 @@ class AutosApiController {
     }
 
     public function updateAuto($params = null){
-        $autos = $this->model->getById($id);
         $id = $params[':ID'];
+        $autos = $this->model->get($id);
         
         if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
-            $this->view->response("El Auto con el id=$id no se existe", 404);
+            $this->view->response("El Auto con el id $id no existe", 404);
         } else {
             $auto = $this->getData();
             $autoUpdate = $this->model->update($id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);

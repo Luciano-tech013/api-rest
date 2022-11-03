@@ -9,7 +9,7 @@ class CategoriasApiController {
     private $data;
 
     function __construct(){
-        $this->model = new CategoriasModel();
+        $this->model = new CategoriaModel();
         $this->view = new MotorApiView();
 
         $this->data = file_get_contents("php://input");
@@ -20,18 +20,18 @@ class CategoriasApiController {
     }
 
     public function getCategorias($params = null){
-        $categorias = $this->model->get();
+        $categorias = $this->model->getAll();
         $this->view->response($categorias, 200);
     }
 
     public function getCategoriaById($params = null){
         $id = $params[":ID"];
-        $categorias = $this->model->getById($id);
+        $categorias = $this->model->get($id);
 
         if($categorias){
             $this->view->response($categorias, 200);
         } else {
-            $this->view->response("La Categoria con el id=$id no existe", 404);
+            $this->view->response("La Categoria con el id $id no existe", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class CategoriasApiController {
             $this->model->delete($id);
             $this->view->response($categorias, 200);
         } else {
-            $this->view->response("La Categoria con el id=$id no se existe", 404);
+            $this->view->response("La Categoria con el id $id no existe", 404);
         }
     }
 
@@ -61,11 +61,11 @@ class CategoriasApiController {
     }
 
     public function updateCategoria($params = null){
-        $categorias = $this->model->getById($id);
         $id = $params[':ID'];
+        $categorias = $this->model->get($id);
         
         if(empty($categorias->nombre) || empty($categorias->descripcion) || empty($categorias->tipo)){
-            $this->view->response("La Categoria con el id=$id no se existe", 404);
+            $this->view->response("La Categoria con el id $id no existe", 404);
         } else {
             $categoria = $this->getData();
             $categoriaUpdate = $this->model->update($id, $categoria->nombre, $categoria->descripcion, $categoria->tipo);

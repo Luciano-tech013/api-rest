@@ -1,6 +1,6 @@
 <?php
 
-class AutosModel {
+class AutoModel {
 
     private $db;
 
@@ -27,9 +27,9 @@ class AutosModel {
         return $query->fetchAll(PDO::FETCH_OBJ); 
     }
 
-    public function add($nombre, $descripcion, $modelo, $marca, $id_categoria){
+    public function add($nombres, $descripcion, $modelo, $marca, $id_categoria){
         $query = $this->db->prepare("INSERT INTO autos (nombres, descripcion, modelo, marca, id_categorias) VALUES (?,?,?,?,?)");
-        $query->execute([$nombre, $descripcion, $modelo, $marca, $id_categoria]);
+        $query->execute([$nombres, $descripcion, $modelo, $marca, $id_categoria]);
 
     }
 

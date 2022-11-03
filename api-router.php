@@ -16,6 +16,6 @@ $router->addRoute('categorias', 'GET', 'CategoriasApiController', 'getCategorias
 $router->addRoute('categorias/:ID', 'GET', 'CategoriasApiController', 'getCategoriaById');
 $router->addRoute('categorias/:ID', 'DELETE', 'CategoriasApiController', 'deleteCategoria');
 $router->addRoute('categorias', 'POST', 'CategoriasApiController', 'insertCategoria');
-$router->addRoute('categorias', 'PUT', 'CategoriasApiController', 'updateCategoria');
+$router->addRoute('categorias/:ID', 'PUT', 'CategoriasApiController', 'updateCategoria');
 
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);
