@@ -9,7 +9,7 @@ class AutosApiController {
     private $data;
 
     function __construct(){
-        $this->model = new AutosModel();
+        $this->model = new AutoModel();
         $this->view = new MotorApiView();
 
         $this->data = file_get_contents("php://input");
@@ -63,15 +63,17 @@ class AutosApiController {
     public function updateAuto($params = null){
         $id = $params[':ID'];
         $autos = $this->model->get($id);
-        $nombres = $autos->nombres;
-        $descripcion = $autos->descripcion;
 
-        if(empty($nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
+       /* $nombres = $autos->nombres;
+        $descripcion = $autos->descripcion;*/
+
+        /*if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
+
             $this->view->response("El Auto con el id $id no existe", 404);
         } else {
             $auto = $this->getData();
             $autoUpdate = $this->model->update($auto->id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
             $this->view->response($autoUpdate, 201);
-        }
+        }*/
     }
 }

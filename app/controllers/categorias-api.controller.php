@@ -20,13 +20,13 @@ class CategoriasApiController {
     }
 
     public function getCategorias($params = null){
-        $categorias = $this->model->get();
+        $categorias = $this->model->getAll();
         $this->view->response($categorias, 200);
     }
 
     public function getCategoriaById($params = null){
         $id = $params[":ID"];
-        $categorias = $this->model->getById($id);
+        $categorias = $this->model->get($id);
 
         if($categorias){
             $this->view->response($categorias, 200);
@@ -61,14 +61,16 @@ class CategoriasApiController {
 
     public function updateCategoria($params = null){
         $id = $params[':ID'];
-        $categorias = $this->model->getById($id);
+
+        $categorias = $this->model->get($id);
+
         
-        if(empty($categorias->nombre) || empty($categorias->descripcion) || empty($categorias->tipo)){
+        /**if(empty($categorias->nombre) || empty($categorias->descripcion) || empty($categorias->tipo)){
             $this->view->response("La Categoria con el id $id no existe", 404);
         } else {
             $categoria = $this->getData();
             $categoriaUpdate = $this->model->update($id, $categoria->nombre, $categoria->descripcion, $categoria->tipo);
             $this->view->response($categoriaUpdate, 201);
-        }
+        }*/
     }
 }

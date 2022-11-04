@@ -3,11 +3,9 @@
 class CategoriaModel {
 
     private $db;
-    private $autosModel;
-
+    
     public function __construct(){
         $this->db = $this->getDb();
-        $this->autosModel = new autosModel();
     }
 
     private function getDB() {
@@ -15,14 +13,14 @@ class CategoriaModel {
         return $db;
     }
 
-    public function get(){
+    public function getAll(){
         $query = $this->db->prepare("SELECT * FROM categorias");
         $query->execute();
         
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function getById($id){
+    public function get($id){
         /**Traigo registros mediante el ID para mostrar el form.edit precargado */
         $query = $this->db->prepare("SELECT * FROM categorias WHERE id_categorias = ?");
         $query->execute([$id]);
