@@ -31,7 +31,7 @@ class AutosApiController {
         if($autos){
             $this->view->response($autos, 200);
         } else {
-            $this->view->response("El Auto con el id=$id no existe", 404);
+            $this->view->response("El Auto con el id $id no existe", 404);
         }
     }
 
@@ -44,7 +44,7 @@ class AutosApiController {
             $this->model->delete($id);
             $this->view->response($autos, 200);
         } else {
-            $this->view->response("El Auto con el id=$id no se existe", 404);
+            $this->view->response("El Auto con el id $id no se existe", 404);
         }
     }
 
@@ -61,14 +61,16 @@ class AutosApiController {
     }
 
     public function updateAuto($params = null){
-        $autos = $this->model->getById($id);
         $id = $params[':ID'];
-        
-        if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
-            $this->view->response("El Auto con el id=$id no se existe", 404);
+        $autos = $this->model->get($id);
+        $nombres = $autos->nombres;
+        $descripcion = $autos->descripcion;
+
+        if(empty($nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
+            $this->view->response("El Auto con el id $id no existe", 404);
         } else {
             $auto = $this->getData();
-            $autoUpdate = $this->model->update($id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
+            $autoUpdate = $this->model->update($auto->id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
             $this->view->response($autoUpdate, 201);
         }
     }
