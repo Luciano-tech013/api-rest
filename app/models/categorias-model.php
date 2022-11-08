@@ -25,7 +25,7 @@ class CategoriaModel {
         $query = $this->db->prepare("SELECT * FROM categorias WHERE id_categorias = ?");
         $query->execute([$id]);
 
-        return $query->fetchAll(PDO::FETCH_OBJ);
+        return $query->fetch(PDO::FETCH_OBJ);
     }
 
     public function add($nombre, $descripcion, $tipo){
@@ -39,7 +39,7 @@ class CategoriaModel {
     }
 
     public function update($id, $nombre, $descripcion, $tipo){
-        $query = $db->prepare("UPDATE `categorias` SET `nombre` = ?, `descripcion` = ?, `tipo` = ? WHERE `categorias`.`id_categorias` = ?");
+        $query = $this->db->prepare("UPDATE `categorias` SET `nombre` = ?, `descripcion` = ?, `tipo` = ? WHERE `categorias`.`id_categorias` = ?");
         $query->execute([$nombre, $descripcion, $tipo, $id]);
     }
 }

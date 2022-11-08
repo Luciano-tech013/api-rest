@@ -19,9 +19,42 @@ class AutosApiController {
         return json_decode($this->data);
     }
 
-    public function getAutos($params = null){
-        $autos = $this->model->getAll();
-        $this->view->response($autos, 200);
+    public function getAutos(){
+        if(isset($_GET['sort']) || !empty($_GET['sort']) && isset($_GET['order']) || !empty($_GET['order']))
+        {
+            $sort = $_GET['sort'];
+            $order = $_GET['order'];
+            
+            if($order && $sort){
+                $autos = $this->model->order($sort, $order);
+                if($autos){
+                    $this->view->response($autos, 200);
+                } else {
+                    $this->view->response("No se puede ordenar", 400);
+                } 
+            } else {
+                $this->view->response("Ese orden no existe");
+            }
+
+        } 
+        else if (isset($_GET['filtrado']) || !empty($_GET['filtrado']) && isset($_GET['valor']) || !empty($_GET['valor']))
+        {
+            $filtrar = $_GET['filtrado'];
+            $valor = $_GET['valor'];
+            
+            if($filtrar && $valor){
+                $autos = $this->model->filter($filtrar, $valor);
+                if($autos){
+                    $this->view->response($autos, 200);
+                } else {
+                    $this->view->response("No se puede filtrar", 400);
+                }
+            }
+
+        } else {
+            $autos = $this->model->getAll();
+            $this->view->response($autos, 200);
+        }
     }
 
     public function getAutoById($params = null){
@@ -63,17 +96,13 @@ class AutosApiController {
     public function updateAuto($params = null){
         $id = $params[':ID'];
         $autos = $this->model->get($id);
-
-       /* $nombres = $autos->nombres;
-        $descripcion = $autos->descripcion;*/
-
-        /*if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
-
+        
+       if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
             $this->view->response("El Auto con el id $id no existe", 404);
         } else {
             $auto = $this->getData();
-            $autoUpdate = $this->model->update($auto->id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
+            $autoUpdate = $this->model->update($id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
             $this->view->response($autoUpdate, 201);
-        }*/
+        }
     }
 }
