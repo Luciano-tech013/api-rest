@@ -70,7 +70,6 @@ class AutosApiController {
 
     public function deleteAuto($params = null){
         $id = $params[":ID"];
-
         $autos = $this->model->get($id);
 
         if($autos){
