@@ -11,7 +11,6 @@ $router->addRoute('autos/:ID', 'GET', 'AutosApiController', 'getAutoById');
 $router->addRoute('autos/:ID', 'DELETE', 'AutosApiController', 'deleteAuto');
 $router->addRoute('autos', 'POST', 'AutosApiController', 'insertAuto');
 $router->addRoute('autos/:ID', 'PUT', 'AutosApiController', 'updateAuto');
-$router->addRoute('autos?order_by&id', 'GET', 'AutosApiController', 'OrderCars');
 
 $router->addRoute('categorias', 'GET', 'CategoriasApiController', 'getCategorias');
 $router->addRoute('categorias/:ID', 'GET', 'CategoriasApiController', 'getCategoriaById');

@@ -64,16 +64,16 @@ class AutosApiController {
         $id = $params[':ID'];
         $autos = $this->model->get($id);
 
-       /* $nombres = $autos->nombres;
+        $nombres = $autos->nombres;
         $descripcion = $autos->descripcion;*/
 
-        /*if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
+        if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
 
             $this->view->response("El Auto con el id $id no existe", 404);
         } else {
             $auto = $this->getData();
             $autoUpdate = $this->model->update($auto->id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
             $this->view->response($autoUpdate, 201);
-        }*/
+        }
     }
 }
