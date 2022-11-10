@@ -3,6 +3,7 @@
 require_once "./libs/Router.php";
 require_once "./app/controllers/autos-api.controller.php";
 require_once './app/controllers/categorias-api.controller.php';
+require_once './app/controllers/auth-api.controller.php';
 
 $router = new Router();
 
@@ -17,5 +18,7 @@ $router->addRoute('categorias/:ID', 'GET', 'CategoriasApiController', 'getCatego
 $router->addRoute('categorias/:ID', 'DELETE', 'CategoriasApiController', 'deleteCategoria');
 $router->addRoute('categorias', 'POST', 'CategoriasApiController', 'insertCategoria');
 $router->addRoute('categorias/:ID', 'PUT', 'CategoriasApiController', 'updateCategoria');
+
+$router->addRoute('auth/token', 'GET', 'AuthApiController', 'getToken');
 
 $router->route($_GET["resource"], $_SERVER['REQUEST_METHOD']);

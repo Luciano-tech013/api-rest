@@ -61,16 +61,16 @@ class CategoriasApiController {
 
     public function updateCategoria($params = null){
         $id = $params[':ID'];
-
         $categorias = $this->model->get($id);
 
-        
         if(empty($categorias->nombre) || empty($categorias->descripcion) || empty($categorias->tipo)){
             $this->view->response("La Categoria con el id $id no existe", 404);
         } else {
             $categoria = $this->getData();
             $categoriaUpdate = $this->model->update($id, $categoria->nombre, $categoria->descripcion, $categoria->tipo);
             $this->view->response($categoriaUpdate, 201);
+            $categoria = $this->model->update($id, $categoria->nombre, $categoria->descripcion, $categoria->tipo);
+            $this->view->response($categoria, 201);
         }
     }
 }
