@@ -43,8 +43,6 @@ class AutoModel {
     public function update($id, $nombre, $descripcion, $modelo, $marca, $id_categoria){
         $query = $this->db->prepare("UPDATE `autos` SET `nombres` = ?, `descripcion` = ?, `modelo` = ?, `marca` = ?, `id_categorias` = ? WHERE `autos`.`id` = ?");
         $query->execute([$nombre, $descripcion, $modelo, $marca, $id_categoria, $id]);
-
-        return;
     }
 
     public function order($sort, $order){

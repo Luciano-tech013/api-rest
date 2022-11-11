@@ -37,15 +37,14 @@ class AuthApiController {
             $this->view->response('La autenticacion debe ser Basic', 401);
             return;
         }
-
-        $userpass = base64url_encode($basic[1]);
-        $userpass = explode(" ", $userpass); /**Obtengo el user y el pass*/
-        var_dump($userpass);
+        
+        $userpass = base64_decode($basic[1]);
+        $userpass = explode(":", $userpass); /**Obtengo el user y el pass*/
         $user = $userpass[0];
         $password = $userpass[1];
         $obtainedUser = $this->model->get($user);
          
-        if(isset($obtainedUser->nombre) && password_verify($password,$obtainedUser->password)){
+        if(isset($obtainedUser->password) && password_verify($password,$obtainedUser->password)){
             
             $header = array(
                 'alg' => 'HS256',

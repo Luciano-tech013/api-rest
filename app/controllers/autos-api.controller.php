@@ -1,16 +1,19 @@
 <?php
 require_once './app/models/autos-model.php';
 require_once './app/views/motor-api.view.php';
+require_once './app/helpers/auth-api.helper.php';
 
 class AutosApiController {
     private $model;
     private $view;
+    private $helper;
 
     private $data;
 
     function __construct(){
         $this->model = new AutoModel();
         $this->view = new MotorApiView();
+        $this->helper = new AuthApiHelper();
 
         $this->data = file_get_contents("php://input");
     }
@@ -25,19 +28,15 @@ class AutosApiController {
             $sort = $_GET['sort'];
             $order = $_GET['order'];
 
-            if($order != 'asc' && $order != 'desc'){
-                $this->view->response(""); //que retorno??
-            }
-            
-            if($this->verifyField($sort)) {
+            if($this->verifyField($sort) && ($order == 'asc' || $order == 'desc')) {
                 $autos = $this->model->order($sort, $order);
                 if($autos){
                     $this->view->response($autos, 200);
                 } else {
-                    $this->view->response("No se puede ordenar", 400);
+                    $this->view->response("No se pudo ordenar", 400);
                 }
             } else{
-                $this->view->response("La columna ingresada no existe", 400);
+                $this->view->response("No se puede ordenar", 400);
             }
         } 
         
@@ -90,7 +89,7 @@ class AutosApiController {
     }
 
     public function insertAuto($params = null){
-        /**$this->helper->isLoggedIn();*/
+        $this->helper->isLoggedIn();
         $autos = $this->getData();
 
         if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
@@ -103,7 +102,7 @@ class AutosApiController {
     }
 
     public function updateAuto($params = null){
-        /**$this->helper->isLoggedIn();*/
+        $this->helper->isLoggedIn();
         $id = $params[':ID'];
         $autos = $this->model->get($id);
 

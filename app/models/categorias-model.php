@@ -31,8 +31,10 @@ class CategoriaModel {
     public function add($nombre, $descripcion, $tipo){
         $query = $this->db->prepare("INSERT INTO categorias (nombre, descripcion, tipo) VALUES(?,?,?)");
         $query->execute([$nombre, $descripcion, $tipo]);
-    }
 
+        return $this->db->lastInsertId();
+    }
+    
     public function delete($id){
         $query = $this->db->prepare("DELETE FROM categorias WHERE id_categorias = ?");
         $query->execute([$id]);
@@ -41,5 +43,19 @@ class CategoriaModel {
     public function update($id, $nombre, $descripcion, $tipo){
         $query = $this->db->prepare("UPDATE `categorias` SET `nombre` = ?, `descripcion` = ?, `tipo` = ? WHERE `categorias`.`id_categorias` = ?");
         $query->execute([$nombre, $descripcion, $tipo, $id]);
+    }
+
+    public function order($sort, $order){
+        $query = $this->db->prepare("SELECT * FROM categorias ORDER BY $sort $order");
+        $query->execute();
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function filter($value){
+        $query = $this->db->prepare("SELECT * FROM categorias WHERE tipo = ?");
+        $query->execute([$value]);
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
     }
 }

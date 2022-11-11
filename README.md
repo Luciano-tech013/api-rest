@@ -37,11 +37,18 @@ Método: GET
 URL: http://motorsportpage-rest/api/recurso?sort=id&order=desc
 Método: GET
 -Si se le pasa los parametros sort y order con valores sort=id y order=desc permite ordenar todos los items del JSON mediante el ID de manera descendente. Si le pasas el parametro order=asc ordena de forma ascendente (como estaba en un principio). SOLAMENTE se puede ordenar por ID. No se requiere estar autenticado
+Por seguridad, si el parametro order no guarda valores igual a 'asc' or 'desc' la api rechazara la solicitud (400 Bad request). Lo mismo sucede con el parametro Sort: Si la variable es diferente a algunos de los campos de la Base de Datos la API rechazara la solicitud (Ver linea 49 y 50)
 -Codigo de respuesta: 200 OK, 400 Bad Request
 
-URL: http://motorsportpage-rest/api/recurso?filtrar=campo&valor=valor
+URL: http://motorsportpage-rest/api/recurso?value=valor
 Método: GET
--Si se le pasa los parametros filtrar y valor con valores filtrar=campo de nuestra tabla y valor=valor de un campo, permite filtrar campos que usted desee. No se requiere estar autenticado
+-Si se le pasa el parametro value con valores de algun campo de la tabla, permite filtrar valores que usted desee. No se requiere estar autenticado
+SOLO se puede filtrar por el campo Modelo (del recurso autos) y el campo Tipo (del recurso categorias). Como sucede con el ordenar, solo se puede filtrar valores especificos que se encuentren en ese campo, si no la API rechazara la solicitud (Ver linea 51 y 52)
 -Codigo de respuesta: 200 OK, 400 Bad request
+
+-Campos del recurso Autos: id, nombres, descripcion, modelo, marca, id_categorias
+-Campos del recurso Categorias: id_categorias, nombre, descripcion, tipo
+-Valores del campo Modelo del recurso Autos: GT3, GTE, LPM1, Hypercar, Turismo
+-Valores del campo Tipo del recurso categorias: INTERNACIONAL, CONTINENTAL, ZONAL, PROVINCIAL, NACIONAL. (Ambos valores en mayuscula) 
 
 /**Chequear si la documentacion esta bien*/
