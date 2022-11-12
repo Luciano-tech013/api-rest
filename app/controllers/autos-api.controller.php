@@ -82,14 +82,17 @@ class AutosApiController {
 
         if($autos){
             $this->model->delete($id);
-            $this->view->response($autos, 200);
+            $this->view->response("El id = $id se elimino correctamente", 200);
         } else {
             $this->view->response("El Auto con el id $id no se existe", 404);
         }
     }
 
     public function insertAuto($params = null){
-        $this->helper->isLoggedIn();
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("Debe estar logueado", 401);
+            return;
+        }
         $autos = $this->getData();
 
         if(empty($autos->nombres) || empty($autos->descripcion) || empty($autos->modelo) || empty($autos->marca) || empty($autos->id_categorias)){
@@ -102,7 +105,10 @@ class AutosApiController {
     }
 
     public function updateAuto($params = null){
-        $this->helper->isLoggedIn();
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("Debe estar logueado", 401);
+            return;
+        }
         $id = $params[':ID'];
         $autos = $this->model->get($id);
 

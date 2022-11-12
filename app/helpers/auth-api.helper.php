@@ -9,12 +9,11 @@ class AuthApiHelper {
         if($auth[0]!='Bearer' || count($auth) != 2){
             return array();
         }
-        
         $token = explode(".", $auth[1]); /**Baerer $header.$payload... */
         $header = $token[0];
         $payload = $token[1];
         $signature = $token[2];
-
+        
         $new_signature = hash_hmac('SHA256', "$header.$payload", "Clave1234", true);
         $new_signature = base64url_encode($new_signature);
         if($signature!=$new_signature)
@@ -39,11 +38,11 @@ class AuthApiHelper {
     }
 
     function isLoggedIn(){
-        $payload = $this->getToken();
-        if(isset($payload->id))
+        $token = $this->getToken();
+        if(isset($token->name)){
             return true;
-        else
+        } else {
             return false;
+        }
     }
-
 }

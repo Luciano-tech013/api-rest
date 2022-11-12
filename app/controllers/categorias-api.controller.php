@@ -77,14 +77,23 @@ class CategoriasApiController {
         $categorias = $this->model->get($id);
 
         if($categorias){
-            $this->model->delete($id);
-            $this->view->response($categorias, 200);
+            $categorias = $this->model->delete($id);
+            if($categorias){
+                $this->view->response("El id = $id se elimino correctamente", 200);
+            } 
+            else {
+                $this->view->response("No se puede eliminar porque debe eliminar los items asociados", 400);
+            }
         } else {
             $this->view->response("La Categoria con el id $id no existe", 404);
         }
     }
 
     public function insertCategoria($params = null){
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("Debe estar logueado", 401);
+            return;
+        }
         $categorias = $this->getData();
 
         if(empty($categorias->nombre) || empty($categorias->descripcion) || empty($categorias->tipo)){
@@ -97,6 +106,10 @@ class CategoriasApiController {
     }
 
     public function updateCategoria($params = null){
+        if(!$this->helper->isLoggedIn()){
+            $this->view->response("Debe estar logueado", 401);
+            return;
+        }
         $id = $params[':ID'];
         $categorias = $this->model->get($id);
 
