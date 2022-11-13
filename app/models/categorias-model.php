@@ -36,8 +36,13 @@ class CategoriaModel {
     }
     
     public function delete($id){
-        $query = $this->db->prepare("DELETE FROM categorias WHERE id_categorias = ?");
-        $query->execute([$id]);
+        try {
+            $query = $this->db->prepare("DELETE FROM categorias WHERE id_categorias = ?");
+            $query->execute([$id]); 
+        } catch(Exception $e){
+            return $e;
+        }
+       
     }
 
     public function update($id, $nombre, $descripcion, $tipo){
@@ -45,16 +50,27 @@ class CategoriaModel {
         $query->execute([$nombre, $descripcion, $tipo, $id]);
     }
 
-    public function order($sort, $order){
+    public function getAllByOrder($sort, $order){
         $query = $this->db->prepare("SELECT * FROM categorias ORDER BY $sort $order");
         $query->execute();
 
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
 
-    public function filter($value){
+    public function getByFilter($value){
         $query = $this->db->prepare("SELECT * FROM categorias WHERE tipo = ?");
         $query->execute([$value]);
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getAllByPagination($offset, $limit){
+        $query = $this->db->prepare('SELECT * FROM categorias LIMIT :paginas, :limite');
+
+        $query->bindParam(':paginas', $offset, PDO::PARAM_INT);
+        $query->bindParam(':limite', $limit, PDO::PARAM_INT);
+
+        $query->execute();
 
         return $query->fetchAll(PDO::FETCH_OBJ);
     }

@@ -27,7 +27,7 @@ class AutosApiController {
         {
             $sort = $_GET['sort'];
             $order = $_GET['order'];
-
+            
             if($this->verifyField($sort) && ($order == 'asc' || $order == 'desc')) {
                 $autos = $this->model->order($sort, $order);
                 if($autos){
@@ -54,8 +54,24 @@ class AutosApiController {
             } else {
                 $this->view->response("El valor ingresado no existe", 400);
             }
+        }
+        
+        else if(isset($_GET['page']) || !empty($_GET['page']) && isset($_GET['limit']) || !empty($_GET['limit']))
+        {
+            $page = $_GET['page'];
+            $limit = $_GET['limit'];
+            $offset = ($limit * $page) - $limit;
 
-        } else {
+            $autos = $this->model->getAllByPagination($offset, $limit);
+            if($autos){
+                $this->view->response($autos, 200);
+            } else {
+                $this->view->response("No se pudo paginar", 400);
+            }
+        } 
+        
+        else 
+        {
             $autos = $this->model->getAll();
             if($autos){
                 $this->view->response($autos, 200);
@@ -76,7 +92,6 @@ class AutosApiController {
     }
 
     public function deleteAuto($params = null){
-        /**$this->helper->isLoggedIn();*/
         $id = $params[":ID"];
         $autos = $this->model->get($id);
 
@@ -129,7 +144,8 @@ class AutosApiController {
             2 => "descripcion",
             3 => "modelo",
             4 => "marca",
-            5 => "id_categorias"
+            5 => "id_categorias",
+            6 => "nombre"
         );
 
         return in_array($sort, $whiteList);

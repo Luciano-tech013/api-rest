@@ -1,16 +1,19 @@
 <?php
 require_once './app/models/categorias-model.php';
 require_once './app/views/motor-api.view.php';
+require_once './app/helpers/auth-api.helper.php';
 
 class CategoriasApiController {
     private $model;
     private $view;
+    private $helper;
 
     private $data;
 
     function __construct(){
         $this->model = new CategoriaModel();
         $this->view = new MotorApiView();
+        $this->helper = new AuthApiHelper();
 
         $this->data = file_get_contents("php://input");
     }
@@ -26,7 +29,7 @@ class CategoriasApiController {
             $order = $_GET['order'];
 
             if($this->verifyField($sort) && ($order == 'asc' && $order == 'desc')) {
-                $categorias = $this->model->order($sort, $order);
+                $categorias = $this->model->getAllByOrder($sort, $order);
                 if($categorias){
                     $this->view->response($categorias, 200);
                 } else {
@@ -42,7 +45,7 @@ class CategoriasApiController {
             $value = $_GET['value'];
 
             if($this->verifyValue($value)){
-                $categorias = $this->model->filter($value);
+                $categorias = $this->model->getByFilter($value);
                 if($categorias){
                     $this->view->response($categorias, 200);
                 } else {
@@ -51,8 +54,24 @@ class CategoriasApiController {
             } else {
                 $this->view->response("El valor ingresado no existe", 400);
             }
+        }
+        
+        else if(isset($_GET['page']) || !empty($_GET['page']) && isset($_GET['limit']) || !empty($_GET['limit']))
+        {
+            $page = $_GET['page'];
+            $limit = $_GET['limit'];
+            $offset = ($limit * $page) - $limit;
 
-        } else {
+            $categorias = $this->model->getAllByPagination($offset, $limit);
+            if($categorias){
+                $this->view->response($categorias, 200);
+            } else {
+                $this->view->response("No se pudo paginar", 400);
+            }
+        }
+
+        else 
+        {
             $categorias = $this->model->getAll();
             if($categorias){
                 $this->view->response($categorias, 200);
@@ -77,12 +96,12 @@ class CategoriasApiController {
         $categorias = $this->model->get($id);
 
         if($categorias){
-            $categorias = $this->model->delete($id);
-            if($categorias){
-                $this->view->response("El id = $id se elimino correctamente", 200);
+            $this->model->delete($id);
+            if($this->model->delete($id)){
+                $this->view->response("No se puede eliminar porque debe eliminar los items asociados a la categoria con id = $id primero", 400);
             } 
             else {
-                $this->view->response("No se puede eliminar porque debe eliminar los items asociados", 400);
+                $this->view->response("El id = $id se elimino correctamente", 200);
             }
         } else {
             $this->view->response("La Categoria con el id $id no existe", 404);

@@ -43,7 +43,7 @@ class AuthApiController {
         $user = $userpass[0];
         $password = $userpass[1];
         $obtainedUser = $this->model->get($user);
-         
+        
         if(isset($obtainedUser->password) && password_verify($password,$obtainedUser->password)){
             
             $header = array(
@@ -60,7 +60,6 @@ class AuthApiController {
             $payload = base64url_encode(json_encode($payload));
             $signature = hash_hmac('SHA256', "$header.$payload", "Clave1234", true);
             $signature = base64url_encode($signature);
-            var_dump($signature);
             $token = "$header.$payload.$signature";
             $this->view->response($token);
         } else {

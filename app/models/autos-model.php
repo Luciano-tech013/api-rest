@@ -14,14 +14,14 @@ class AutoModel {
     }
 
     public function getAll(){
-        $query = $this->db->prepare("SELECT * FROM autos");
+        $query = $this->db->prepare("SELECT autos.*, categorias.nombre FROM autos JOIN categorias ON autos.id_categorias = categorias.id_categorias");
         $query->execute();
         
         return $query->fetchAll(PDO::FETCH_OBJ); 
     }
 
     public function get($id){
-        $query = $this->db->prepare("SELECT * FROM autos WHERE id = ?");
+        $query = $this->db->prepare("SELECT autos.*, categorias.nombre FROM autos JOIN categorias ON autos.id_categorias = categorias.id_categorias WHERE id = ?");
         $query->execute([$id]);
         
         return $query->fetch(PDO::FETCH_OBJ); 
@@ -46,7 +46,7 @@ class AutoModel {
     }
 
     public function order($sort, $order){
-        $query = $this->db->prepare("SELECT * FROM autos ORDER BY $sort $order");
+        $query = $this->db->prepare("SELECT autos.*, categorias.nombre FROM autos JOIN categorias ON autos.id_categorias = categorias.id_categorias ORDER BY $sort $order");
         $query->execute();
 
         return $query->fetchAll(PDO::FETCH_OBJ);
@@ -55,6 +55,17 @@ class AutoModel {
     public function filter($value){
         $query = $this->db->prepare("SELECT * FROM autos WHERE modelo = ?");
         $query->execute([$value]);
+
+        return $query->fetchAll(PDO::FETCH_OBJ);
+    }
+
+    public function getAllByPagination($offset, $limit){
+        $query = $this->db->prepare('SELECT autos.*, categorias.nombre FROM autos JOIN categorias ON autos.id_categorias = categorias.id_categorias LIMIT :paginas, :limite');
+
+        $query->bindParam(':paginas', $offset, PDO::PARAM_INT);
+        $query->bindParam(':limite', $limit, PDO::PARAM_INT);
+
+        $query->execute();
 
         return $query->fetchAll(PDO::FETCH_OBJ);
     }
