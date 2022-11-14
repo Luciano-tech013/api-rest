@@ -28,7 +28,7 @@ class CategoriasApiController {
             $sort = $_GET['sort'];
             $order = $_GET['order'];
 
-            if($this->verifyField($sort) && ($order == 'asc' && $order == 'desc')) {
+            if($this->verifyField($sort) && ($order == 'asc' || $order == 'desc')) {
                 $categorias = $this->model->getAllByOrder($sort, $order);
                 if($categorias){
                     $this->view->response($categorias, 200);
