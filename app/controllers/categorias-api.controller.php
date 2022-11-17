@@ -76,7 +76,8 @@ class CategoriasApiController {
             if($categorias){
                 $this->view->response($categorias, 200);
             } else {
-                $this->view->response("No se pudo encontrar el recurso solicitado", 400);            }
+                $this->view->response("No se pudo encontrar el recurso solicitado", 400);           
+            }
         }
     }
     
@@ -99,6 +100,7 @@ class CategoriasApiController {
             $this->model->delete($id);
             if($this->model->delete($id)){
                 $this->view->response("No se puede eliminar porque debe eliminar los items asociados a la categoria con id = $id primero", 400);
+                die();
             } 
             else {
                 $this->view->response("El id = $id se elimino correctamente", 200);

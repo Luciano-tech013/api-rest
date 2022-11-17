@@ -29,7 +29,7 @@ class AutosApiController {
             $order = $_GET['order'];
             
             if($this->verifyField($sort) && ($order == 'asc' || $order == 'desc')) {
-                $autos = $this->model->order($sort, $order);
+                $autos = $this->model->getAllByOrder($sort, $order);
                 if($autos){
                     $this->view->response($autos, 200);
                 } else {
@@ -45,7 +45,7 @@ class AutosApiController {
             $value = $_GET['value'];
 
             if($this->verifyValue($value)){
-                $autos = $this->model->filter($value);
+                $autos = $this->model->getByFilter($value);
                 if($autos){
                     $this->view->response($autos, 200);
                 } else {
@@ -114,8 +114,12 @@ class AutosApiController {
             $this->view->response("Complete los datos", 400);
         } else {
             $id = $this->model->add($autos->nombres, $autos->descripcion, $autos->modelo, $autos->marca, $autos->id_categorias);
-            $autos = $this->model->get($id);
-            $this->view->response($autos, 201);
+            if($id){
+                $autos = $this->model->get($id);
+                $this->view->response($autos, 201);
+            } else {
+                $this->view->response("La categoria ingresada con ese id no existe", 400);
+            }
         }
     }
 
@@ -131,9 +135,13 @@ class AutosApiController {
             $this->view->response("El Auto con el id $id no existe", 404);
         } else {
             $auto = $this->getData();
-            $this->model->update($id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
-            $autoUpdate = $this->model->get($id);
-            $this->view->response($autoUpdate, 201);
+            $update = $this->model->update($id, $auto->nombres, $auto->descripcion, $auto->modelo, $auto->marca, $auto->id_categorias);
+            if($update){
+                $this->view->response("La categoria ingresada no existe", 400);
+            } else {
+                $autoUpdate = $this->model->get($id);
+                $this->view->response($autoUpdate, 201);
+            }
         }
     }
 

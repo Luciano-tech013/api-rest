@@ -39,7 +39,8 @@ class CategoriaModel {
         try {
             $query = $this->db->prepare("DELETE FROM categorias WHERE id_categorias = ?");
             $query->execute([$id]); 
-        } catch(Exception $e){
+        } 
+        catch(Exception $e){
             return $e;
         }
        
